@@ -21,6 +21,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.renderscript.RenderScript
 import androidx.core.app.NotificationCompat
 import com.example.android.eggtimernotifications.MainActivity
 import com.example.android.eggtimernotifications.R
@@ -56,8 +57,17 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
     val bigPicStyle = NotificationCompat.BigPictureStyle()
         .bigPicture(eggImage)
         .bigLargeIcon(null)
-    // TODO: Step 2.2 add snooze action
-
+    // add snooze action
+    val snoozeIntent = Intent(
+        applicationContext,
+        SnoozeReceiver::class.java
+    )
+    val pendingSnoozeIntent = PendingIntent.getBroadcast(
+        applicationContext,
+        REQUEST_CODE,
+        snoozeIntent,
+        FLAGS
+    )
     // Build the notification
     // get an instance of NotificationCompat.Builder
     val builder = NotificationCompat.Builder(
@@ -78,10 +88,12 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
         // add style to builder
         .setStyle(bigPicStyle)
         .setLargeIcon(eggImage)
-    // TODO: Step 2.3 add snooze action
-
-    // TODO: Step 2.5 set priority
-
+    //add snooze action
+        .addAction(R.drawable.egg_icon,
+        applicationContext.getString(R.string.snooze),
+        pendingSnoozeIntent)
+    // set priority
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
     // call notify
     notify(NOTIFICATION_ID, builder.build())
 }
