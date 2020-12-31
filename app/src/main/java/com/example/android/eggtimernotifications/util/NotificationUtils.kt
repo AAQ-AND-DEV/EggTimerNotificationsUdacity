@@ -44,43 +44,49 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
     val contentIntent = Intent(applicationContext, MainActivity::class.java)
     // create PendingIntent
     val contentPendingIntent = PendingIntent.getActivity(
-            applicationContext,
-            NOTIFICATION_ID,
-            contentIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+        applicationContext,
+        NOTIFICATION_ID,
+        contentIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT
     )
-    // TODO: Step 2.0 add style
-
+    // add style
+    val eggImage = BitmapFactory.decodeResource(
+        applicationContext.resources, R.drawable.cooked_egg
+    )
+    val bigPicStyle = NotificationCompat.BigPictureStyle()
+        .bigPicture(eggImage)
+        .bigLargeIcon(null)
     // TODO: Step 2.2 add snooze action
 
     // Build the notification
     // get an instance of NotificationCompat.Builder
     val builder = NotificationCompat.Builder(
-            applicationContext,
-            applicationContext.getString(R.string.egg_notification_channel_id)
+        applicationContext,
+        applicationContext.getString(R.string.egg_notification_channel_id)
     )
 
-    // TODO: Step 1.8 use the new 'breakfast' notification channel
+        // TODO: Step 1.8 use the new 'breakfast' notification channel
 
-    // set title, text and icon to builder
-            .setSmallIcon(R.drawable.cooked_egg)
-            .setContentTitle(applicationContext.getString(R.string.notification_title))
-            .setContentText(messageBody)
+        // set title, text and icon to builder
+        .setSmallIcon(R.drawable.cooked_egg)
+        .setContentTitle(applicationContext.getString(R.string.notification_title))
+        .setContentText(messageBody)
 
-    // set content intent
-            .setContentIntent(contentPendingIntent)
-            .setAutoCancel(true)
-        // TODO: Step 2.1 add style to builder
+        // set content intent
+        .setContentIntent(contentPendingIntent)
+        .setAutoCancel(true)
+        // add style to builder
+        .setStyle(bigPicStyle)
+        .setLargeIcon(eggImage)
+    // TODO: Step 2.3 add snooze action
 
-        // TODO: Step 2.3 add snooze action
-
-        // TODO: Step 2.5 set priority
+    // TODO: Step 2.5 set priority
 
     // call notify
-            notify(NOTIFICATION_ID, builder.build())
+    notify(NOTIFICATION_ID, builder.build())
 }
 
 //  Cancel all notifications
-fun NotificationManager.cancelNotifications(){
+fun NotificationManager.cancelNotifications() {
     cancelAll()
 }
