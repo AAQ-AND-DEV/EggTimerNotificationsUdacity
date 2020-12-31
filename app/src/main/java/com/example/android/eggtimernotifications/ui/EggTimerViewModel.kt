@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
 import com.example.android.eggtimernotifications.receiver.AlarmReceiver
 import com.example.android.eggtimernotifications.R
+import com.example.android.eggtimernotifications.util.cancelNotifications
 import com.example.android.eggtimernotifications.util.sendNotification
 import kotlinx.coroutines.*
 
@@ -126,6 +127,10 @@ class EggTimerViewModel(private val app: Application) : AndroidViewModel(app) {
                     triggerTime,
                     notifyPendingIntent
                 )
+
+                val notificMngr = ContextCompat.getSystemService(app,
+                        NotificationManager::class.java) as NotificationManager
+                notificMngr.cancelNotifications()
 
                 viewModelScope.launch {
                     saveTime(triggerTime)
